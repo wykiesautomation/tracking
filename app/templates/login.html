@@ -1,0 +1,1 @@
+{% extends "base.html" %}{% block body %}<section class="login"><h1>FleetTrack 360</h1><form method="post" class="panel"><input type="hidden" name="csrf_token" value="{{csrf_token()}}"><input name="email" placeholder="Email"><input name="password" type="password" placeholder="Password"><button>Sign in</button></form></section>{% endblock %}

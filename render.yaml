@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: fleettrack-360
+    runtime: docker
+    plan: starter
+    healthCheckPath: /api/fleet/v1/health
+    envVars: &fleetEnv
+      - key: SECRET_KEY
+        generateValue: true
+      - key: SEED_DEMO
+        value: "false"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: fleettrack-360-db
+          property: connectionString
+  - type: worker
+    name: fleettrack-360-correlation
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: python worker.py
+    envVars: *fleetEnv
+  - type: worker
+    name: fleettrack-360-notifications
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: python notification_worker.py
+    envVars: *fleetEnv
+databases:
+  - name: fleettrack-360-db
+    plan: starter
